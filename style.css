@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    overflow: hidden;
+    background: #1a3a2e;
+    touch-action: none; /* Prevent bounce/scroll on mobile */
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #2d5a4a 0%, #1a3a2e 100%);
+}
+
+#game-canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    background: #2d5a4a;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Overlays */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(26, 58, 46, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay h1 {
+    font-size: 3rem;
+    color: #8BC34A;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+}
+
+.overlay p {
+    font-size: 1.2rem;
+    color: #C8E6C9;
+    margin-bottom: 1rem;
+}
+
+.overlay button {
+    padding: 15px 40px;
+    font-size: 1.5rem;
+    background: #8BC34A;
+    color: #1a3a2e;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, background 0.2s;
+    font-weight: bold;
+}
+
+.overlay button:hover {
+    background: #9CCC65;
+    transform: translateY(-2px);
+}
+
+.overlay button:active {
+    transform: translateY(0);
+}
+
+.controls-hint {
+    font-size: 0.9rem;
+    color: #A5D6A7;
+    margin-top: 1rem;
+    opacity: 0.8;
+}
+
+/* Score Display */
+#score-display {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    font-weight: bold;
+    color: #8BC34A;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Hearts Display */
+#hearts-display {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #FF1493;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* High Score Display */
+#high-score-display {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    font-weight: bold;
+    color: #A5D6A7;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* Dedication Message */
+#dedication {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: #C8E6C9;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0.7;
+    letter-spacing: 0.05em;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .overlay h1 {
+        font-size: 2.5rem;
+    }
+
+    .overlay p {
+        font-size: 1rem;
+    }
+
+    .overlay button {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+    }
+
+    #score-display {
+        font-size: 2.5rem;
+        top: 15px;
+    }
+
+    #hearts-display {
+        font-size: 1.8rem;
+        top: 15px;
+        right: 15px;
+    }
+
+    #high-score-display {
+        font-size: 0.9rem;
+        top: 70px;
+    }
+
+    #dedication {
+        font-size: 0.7rem;
+        bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .overlay h1 {
+        font-size: 2rem;
+    }
+
+    .overlay button {
+        font-size: 1rem;
+        padding: 10px 25px;
+    }
+
+    #score-display {
+        font-size: 2rem;
+        top: 10px;
+    }
+
+    #hearts-display {
+        font-size: 1.5rem;
+        top: 10px;
+        right: 10px;
+    }
+
+    #high-score-display {
+        font-size: 0.8rem;
+        top: 60px;
+    }
+
+    #dedication {
+        font-size: 0.65rem;
+        bottom: 5px;
+    }
+}
+
+/* Portrait orientation optimization */
+@media (orientation: portrait) {
+    #game-canvas {
+        width: 100vw;
+        height: auto;
+    }
+}
+
+@media (orientation: landscape) {
+    #game-canvas {
+        width: auto;
+        height: 100vh;
+    }
+}

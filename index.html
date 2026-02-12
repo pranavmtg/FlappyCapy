@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>FlappyCapy - Swamp Adventure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Start Screen Overlay -->
+        <div id="start-screen" class="overlay">
+            <h1>🦫 FlappyCapy</h1>
+            <p>Navigate the swamp!</p>
+            <button id="start-btn">Start Game</button>
+            <p class="controls-hint">Tap screen or press SPACE to hop</p>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="game-over-screen" class="overlay hidden">
+            <h1>Game Over!</h1>
+            <p id="final-score">Score: 0</p>
+            <button id="restart-btn">Restart</button>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Score Display -->
+        <div id="score-display">0</div>
+
+        <!-- Hearts Display -->
+        <div id="hearts-display">💖 0</div>
+
+        <!-- High Score Display -->
+        <div id="high-score-display">Best: 0 | 💖 0</div>
+
+        <!-- Dedication Message -->
+        <div id="dedication">Created with love by Pranav for Mia</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
