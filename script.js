@@ -38,8 +38,13 @@ const CONFIG = {
         capybara: '#8B4513',      // Brown
         tree: '#2F4F2F',          // Dark green
         ground: '#1a3a2e',        // Dark swamp
-        sky: '#4a7c59',           // Swamp green sky
-        water: '#3a5a4a',         // Murky water
+        sky: '#87CEEB',           // Light blue sky
+        water: '#4A90E2',         // Blue water
+        darkWater: '#2E5C8A',     // Dark blue water
+        lilyPad: '#3D7C47',       // Lily pad green
+        trunk: '#5D4037',         // Tree trunk brown
+        leaves: '#4CAF50',        // Bright green leaves
+        darkLeaves: '#2E7D32',    // Dark green leaves
         mist: 'rgba(200, 230, 201, 0.1)' // Light mist
     }
 };
@@ -439,23 +444,86 @@ function drawBackground() {
     if (game.images.background) {
         ctx.drawImage(game.images.background, 0, 0, CONFIG.canvasWidth, CONFIG.canvasHeight);
     } else {
-        // Placeholder: Gradient sky
+        // Blue water gradient
         const gradient = ctx.createLinearGradient(0, 0, 0, CONFIG.canvasHeight);
         gradient.addColorStop(0, CONFIG.colors.sky);
-        gradient.addColorStop(0.7, CONFIG.colors.water);
-        gradient.addColorStop(1, CONFIG.colors.ground);
+        gradient.addColorStop(0.3, CONFIG.colors.water);
+        gradient.addColorStop(1, CONFIG.colors.darkWater);
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, CONFIG.canvasWidth, CONFIG.canvasHeight);
 
-        // Draw water ripples
-        ctx.fillStyle = 'rgba(42, 90, 74, 0.3)';
-        const waterStart = CONFIG.canvasHeight * 0.7;
-        for (let i = 0; i < 3; i++) {
-            const y = waterStart + i * 20 + Math.sin(game.frameCount * 0.05 + i) * 5;
-            ctx.fillRect(0, y, CONFIG.canvasWidth, 10);
+        // Draw animated water ripples
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        for (let i = 0; i < 5; i++) {
+            const y = (CONFIG.canvasHeight * 0.3) + i * 80 + Math.sin(game.frameCount * 0.03 + i) * 8;
+            ctx.fillRect(0, y, CONFIG.canvasWidth, 3);
         }
+
+        // Draw floating lily pads
+        drawLilyPads();
     }
+}
+
+function drawLilyPads() {
+    const ctx = game.ctx;
+
+    // Draw several lily pads at fixed positions (with slow animation)
+    const lilyPads = [
+        { x: 50, y: 200, size: 25 },
+        { x: 150, y: 350, size: 30 },
+        { x: 300, y: 250, size: 28 },
+        { x: 220, y: 450, size: 22 },
+        { x: 350, y: 400, size: 26 },
+        { x: 80, y: 500, size: 24 }
+    ];
+
+    lilyPads.forEach((pad, index) => {
+        // Slow bobbing animation
+        const bob = Math.sin(game.frameCount * 0.02 + index) * 2;
+        const x = pad.x + Math.sin(game.frameCount * 0.01 + index) * 5;
+        const y = pad.y + bob;
+
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Lily pad body (rounded shape)
+        ctx.fillStyle = CONFIG.colors.lilyPad;
+        ctx.beginPath();
+        ctx.arc(0, 0, pad.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Darker outline
+        ctx.strokeStyle = CONFIG.colors.darkLeaves;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Small notch (v-shape cut)
+        ctx.fillStyle = CONFIG.colors.water;
+        ctx.beginPath();
+        ctx.moveTo(pad.size * 0.7, -pad.size * 0.3);
+        ctx.lineTo(pad.size, 0);
+        ctx.lineTo(pad.size * 0.7, pad.size * 0.3);
+        ctx.fill();
+
+        // Subtle vein details
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(pad.size * 0.8, 0);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(pad.size * 0.6, -pad.size * 0.4);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(pad.size * 0.6, pad.size * 0.4);
+        ctx.stroke();
+
+        ctx.restore();
+    });
 }
 
 function drawCapybara() {
@@ -649,40 +717,82 @@ function drawTree(tree) {
             CONFIG.canvasHeight - tree.bottomY
         );
     } else {
-        // Placeholder: Dark green rectangles with texture
-        const treeColor = CONFIG.colors.tree;
+        // Draw tree-like obstacles with trunk and leaves
+        const trunkWidth = CONFIG.treeWidth * 0.35;
+        const trunkX = tree.x + (CONFIG.treeWidth - trunkWidth) / 2;
+        const foliageWidth = CONFIG.treeWidth;
 
-        // Top tree
-        ctx.fillStyle = treeColor;
-        ctx.fillRect(tree.x, 0, CONFIG.treeWidth, tree.topHeight);
+        // === TOP TREE (growing downward) ===
 
-        // Add texture lines
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+        // Top tree trunk
+        ctx.fillStyle = CONFIG.colors.trunk;
+        ctx.fillRect(trunkX, 0, trunkWidth, tree.topHeight - 40);
+
+        // Trunk texture
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
         ctx.lineWidth = 2;
-        for (let i = 0; i < tree.topHeight; i += 20) {
+        for (let i = 0; i < tree.topHeight - 40; i += 15) {
             ctx.beginPath();
-            ctx.moveTo(tree.x, i);
-            ctx.lineTo(tree.x + CONFIG.treeWidth, i);
+            ctx.moveTo(trunkX, i);
+            ctx.lineTo(trunkX + trunkWidth, i);
             ctx.stroke();
         }
 
-        // Bottom tree
-        ctx.fillStyle = treeColor;
-        ctx.fillRect(tree.x, tree.bottomY, CONFIG.treeWidth, CONFIG.canvasHeight - tree.bottomY);
+        // Top tree foliage (bushy leaves at bottom)
+        const topFoliageY = tree.topHeight - 50;
 
-        // Add texture lines
-        for (let i = tree.bottomY; i < CONFIG.canvasHeight; i += 20) {
+        // Multiple leaf circles for bushy look
+        for (let i = 0; i < 3; i++) {
+            const offsetX = (i - 1) * (foliageWidth * 0.35);
+            const radius = foliageWidth * 0.35;
+
+            // Dark leaves (shadow)
+            ctx.fillStyle = CONFIG.colors.darkLeaves;
             ctx.beginPath();
-            ctx.moveTo(tree.x, i);
-            ctx.lineTo(tree.x + CONFIG.treeWidth, i);
+            ctx.arc(tree.x + foliageWidth / 2 + offsetX, topFoliageY + 5, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Bright leaves (highlight)
+            ctx.fillStyle = CONFIG.colors.leaves;
+            ctx.beginPath();
+            ctx.arc(tree.x + foliageWidth / 2 + offsetX, topFoliageY, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // === BOTTOM TREE (growing upward) ===
+
+        // Bottom tree trunk
+        ctx.fillStyle = CONFIG.colors.trunk;
+        ctx.fillRect(trunkX, tree.bottomY + 40, trunkWidth, CONFIG.canvasHeight - tree.bottomY - 40);
+
+        // Trunk texture
+        for (let i = tree.bottomY + 40; i < CONFIG.canvasHeight; i += 15) {
+            ctx.beginPath();
+            ctx.moveTo(trunkX, i);
+            ctx.lineTo(trunkX + trunkWidth, i);
             ctx.stroke();
         }
 
-        // Highlight edge
-        ctx.strokeStyle = 'rgba(139, 195, 74, 0.5)';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(tree.x, 0, CONFIG.treeWidth, tree.topHeight);
-        ctx.strokeRect(tree.x, tree.bottomY, CONFIG.treeWidth, CONFIG.canvasHeight - tree.bottomY);
+        // Bottom tree foliage (bushy leaves at top)
+        const bottomFoliageY = tree.bottomY + 50;
+
+        // Multiple leaf circles for bushy look
+        for (let i = 0; i < 3; i++) {
+            const offsetX = (i - 1) * (foliageWidth * 0.35);
+            const radius = foliageWidth * 0.35;
+
+            // Dark leaves (shadow)
+            ctx.fillStyle = CONFIG.colors.darkLeaves;
+            ctx.beginPath();
+            ctx.arc(tree.x + foliageWidth / 2 + offsetX, bottomFoliageY + 5, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Bright leaves (highlight)
+            ctx.fillStyle = CONFIG.colors.leaves;
+            ctx.beginPath();
+            ctx.arc(tree.x + foliageWidth / 2 + offsetX, bottomFoliageY, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
 }
 
