@@ -138,16 +138,19 @@ body {
 /* Dedication Message */
 #dedication {
     position: absolute;
-    bottom: 25%;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
-    color: #C8E6C9;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    color: #FFFFFF;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     z-index: 5;
     pointer-events: none;
-    opacity: 0.7;
     letter-spacing: 0.05em;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8px 16px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
 }
 
 /* Mobile Responsive */
@@ -183,7 +186,8 @@ body {
 
     #dedication {
         font-size: 0.7rem;
-        bottom: 23%;
+        top: 15px;
+        padding: 6px 12px;
     }
 }
 
@@ -215,7 +219,8 @@ body {
 
     #dedication {
         font-size: 0.65rem;
-        bottom: 20%;
+        top: 12px;
+        padding: 5px 10px;
     }
 }
 
