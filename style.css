@@ -151,6 +151,8 @@ body {
     padding: 8px 16px;
     border-radius: 8px;
     backdrop-filter: blur(4px);
+    white-space: nowrap;
+    text-align: center;
 }
 
 /* Mobile Responsive */
@@ -188,6 +190,8 @@ body {
         font-size: 0.7rem;
         top: 100px;
         padding: 6px 12px;
+        white-space: nowrap;
+        text-align: center;
     }
 }
 
@@ -221,6 +225,8 @@ body {
         font-size: 0.65rem;
         top: 90px;
         padding: 5px 10px;
+        white-space: nowrap;
+        text-align: center;
     }
 }
 
