@@ -138,7 +138,7 @@ body {
 /* Dedication Message */
 #dedication {
     position: absolute;
-    top: 20px;
+    top: 115px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
@@ -186,7 +186,7 @@ body {
 
     #dedication {
         font-size: 0.7rem;
-        top: 15px;
+        top: 100px;
         padding: 6px 12px;
     }
 }
@@ -219,7 +219,7 @@ body {
 
     #dedication {
         font-size: 0.65rem;
-        top: 12px;
+        top: 90px;
         padding: 5px 10px;
     }
 }
